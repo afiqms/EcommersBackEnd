@@ -4,13 +4,17 @@ import com.clothes.ecommerce.Exception.userAlreadyExistException;
 import com.clothes.ecommerce.Model.LoginBody;
 import com.clothes.ecommerce.Model.RegistrationBody;
 import com.clothes.ecommerce.dao.LocalUserDAO;
+import com.clothes.ecommerce.dao.UserRepository;
 import com.clothes.ecommerce.entity.LocalUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
 public class UserService {
+    @Autowired
+    private UserRepository userRepository;
 
     private LocalUserDAO localUserDAO;
     private EncryptionService encryptionService;
@@ -54,6 +58,10 @@ public class UserService {
             }
         }
         return null;
+    }
+
+    public Optional<LocalUser> getUserById(Long id) {
+        return userRepository.findById(id);
     }
 
 }

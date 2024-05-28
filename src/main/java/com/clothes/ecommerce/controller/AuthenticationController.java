@@ -7,6 +7,7 @@ import com.clothes.ecommerce.Model.RegistrationBody;
 import com.clothes.ecommerce.entity.LocalUser;
 import com.clothes.ecommerce.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
+    @Autowired
     private final UserService userService; // Make userService final
 
     public AuthenticationController(UserService userService) {
@@ -47,5 +49,12 @@ public class AuthenticationController {
     @GetMapping("/me")
     public LocalUser getLoggedInUserProfile(@AuthenticationPrincipal LocalUser user) {
         return user;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LocalUser> getUserById(@PathVariable Long id) {
+        return userService.getUserById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
